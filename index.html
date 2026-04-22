@@ -162,41 +162,55 @@
       text-shadow: 0 2px 24px rgba(0,0,0,0.4);
     }
 
-    /* BOTTOM CENTER — Menu */
-    .btn-menu {
+
+
+    /* SOUND TOGGLE */
+    .btn-sound {
       position: absolute;
       bottom: clamp(28px, 5vh, 60px);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 13px 22px;
+      gap: 10px;
+      padding: 11px 20px;
       border-radius: 999px;
       background: rgba(245,240,232,0.09);
       border: 1px solid rgba(245,240,232,0.18);
       backdrop-filter: blur(16px);
       color: #f5f0e8;
       font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       cursor: none;
       transition: background 0.3s;
       animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.35s both;
     }
-    .btn-menu:hover { background: rgba(245,240,232,0.16); }
-    .burger-icon { display: flex; flex-direction: column; gap: 4px; }
-    .burger-icon span {
-      display: block; height: 1.5px; background: #f5f0e8; border-radius: 1px;
-      transition: width 0.3s;
+    .btn-sound:hover { background: rgba(245,240,232,0.16); }
+    .sound-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 16px;
     }
-    .burger-icon span:nth-child(1) { width: 18px; }
-    .burger-icon span:nth-child(2) { width: 14px; }
-    .burger-icon span:nth-child(3) { width: 10px; }
-    .btn-menu:hover .burger-icon span { width: 18px; }
-
-    /* BOTTOM RIGHT — description */
+    .sound-bars span {
+      display: block;
+      width: 2.5px;
+      background: #f5f0e8;
+      border-radius: 2px;
+      animation: bar 1.1s ease-in-out infinite alternate;
+    }
+    .sound-bars span:nth-child(1) { height: 6px;  animation-delay: 0s; }
+    .sound-bars span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+    .sound-bars span:nth-child(3) { height: 9px;  animation-delay: 0.4s; }
+    .sound-bars span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
+    .sound-bars span:nth-child(5) { height: 6px;  animation-delay: 0.3s; }
+    .btn-sound.muted .sound-bars span { animation: none; height: 3px; opacity: 0.4; }
+    @keyframes bar {
+      from { transform: scaleY(0.4); }
+      to   { transform: scaleY(1); }
+    }
     .description {
       position: absolute;
       bottom: clamp(28px, 5vh, 60px);
@@ -264,32 +278,53 @@
         <p>Deeper into<br>Nature — Deeper<br>into Yourself</p>
       </div>
 
-      <div class="btn-menu">
-        Menu
-        <div class="burger-icon">
-          <span></span><span></span><span></span>
+
+
+      <div class="btn-sound" id="soundBtn" onclick="toggleSound()">
+        Sound
+        <div class="sound-bars">
+          <span></span><span></span><span></span><span></span><span></span>
         </div>
       </div>
-
-      <div class="description">
         <p>Immerse yourself in the heart of the jungle. Where every breath is a discovery.</p>
       </div>
 
     </div>
   </div>
 
+  <audio id="ambient" src="./jungle-audio.wav" loop></audio>
+
   <script>
     const cursor = document.getElementById('cursor');
-    let cx = 0, cy = 0;
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
-      cursor.style.left = cx + 'px';
-      cursor.style.top  = cy + 'px';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
     });
-    document.querySelectorAll('a, .btn-menu, .btn-explore').forEach(el => {
+    document.querySelectorAll('a, .btn-sound, .btn-explore').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
+
+    const audio = document.getElementById('ambient');
+    const btn = document.getElementById('soundBtn');
+    let playing = false;
+
+    // autoplay on first user interaction
+    document.addEventListener('click', () => {
+      if (!playing) { audio.play(); playing = true; }
+    }, { once: true });
+
+    function toggleSound() {
+      if (audio.paused) {
+        audio.play();
+        playing = true;
+        btn.classList.remove('muted');
+      } else {
+        audio.pause();
+        playing = false;
+        btn.classList.add('muted');
+      }
+    }
   </script>
 
 </body>
