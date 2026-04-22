@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jungle®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #0a0f08;
+      font-family: 'DM Sans', sans-serif;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: #f5f0e8;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor.hover { width: 40px; height: 40px; }
+
+    /* BLURRED VIDEO OUTSIDE FRAME */
+    .outer-video {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .outer-video video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: blur(22px) brightness(0.35) saturate(0.5);
+      transform: scale(1.12);
+    }
+
+    /* FRAME */
+    .frame {
+      position: fixed;
+      inset: 5vh 5vw;
+      z-index: 10;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.14);
+      box-shadow: 0 0 100px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    /* SHARP VIDEO INSIDE FRAME */
+    .inner-video {
+      position: absolute; inset: 0;
+    }
+    .inner-video video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7) saturate(1.15);
+    }
+
+    /* GRADIENTS */
+    .grad-bottom {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to top, rgba(4,8,3,0.8) 0%, rgba(4,8,3,0.05) 45%, transparent 70%);
+    }
+    .grad-left {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to right, rgba(4,8,3,0.55) 0%, transparent 55%);
+    }
+
+    /* GRAIN */
+    .grain {
+      position: absolute; inset: 0; z-index: 2; opacity: 0.045; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* UI LAYER */
+    .ui { position: absolute; inset: 0; z-index: 3; }
+
+    /* TOP LEFT — Title */
+    .title {
+      position: absolute;
+      top: clamp(24px, 4vh, 52px);
+      left: clamp(28px, 4vw, 60px);
+      animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .title h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(56px, 9.5vw, 138px);
+      font-weight: 400;
+      color: #f5f0e8;
+      line-height: 0.88;
+      letter-spacing: -0.025em;
+      text-shadow: 0 4px 40px rgba(0,0,0,0.25);
+    }
+    .title h1 sup {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.22em;
+      font-weight: 300;
+      vertical-align: super;
+      opacity: 0.55;
+      letter-spacing: 0;
+    }
+
+    /* TOP RIGHT — Explore button */
+    .btn-explore {
+      position: absolute;
+      top: clamp(24px, 4vh, 52px);
+      right: clamp(28px, 4vw, 60px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px 10px 20px;
+      border-radius: 999px;
+      background: rgba(245,240,232,0.1);
+      border: 1px solid rgba(245,240,232,0.22);
+      backdrop-filter: blur(14px);
+      color: #f5f0e8;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: none;
+      transition: background 0.3s, border-color 0.3s;
+      animation: fadeDown 1.2s cubic-bezier(0.16,1,0.3,1) 0.15s both;
+    }
+    .btn-explore:hover {
+      background: rgba(245,240,232,0.18);
+      border-color: rgba(245,240,232,0.45);
+    }
+    .arrow-circle {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #f5f0e8;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-explore:hover .arrow-circle { transform: rotate(45deg); }
+    .arrow-circle svg { width: 13px; height: 13px; }
+
+    /* BOTTOM LEFT — tagline */
+    .tagline {
+      position: absolute;
+      bottom: clamp(28px, 5vh, 60px);
+      left: clamp(28px, 4vw, 60px);
+      animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.25s both;
+    }
+    .tagline p {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 44px);
+      color: #f5f0e8;
+      line-height: 1.15;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+
+    /* BOTTOM CENTER — Menu */
+    .btn-menu {
+      position: absolute;
+      bottom: clamp(28px, 5vh, 60px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      background: rgba(245,240,232,0.09);
+      border: 1px solid rgba(245,240,232,0.18);
+      backdrop-filter: blur(16px);
+      color: #f5f0e8;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      cursor: none;
+      transition: background 0.3s;
+      animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.35s both;
+    }
+    .btn-menu:hover { background: rgba(245,240,232,0.16); }
+    .burger-icon { display: flex; flex-direction: column; gap: 4px; }
+    .burger-icon span {
+      display: block; height: 1.5px; background: #f5f0e8; border-radius: 1px;
+      transition: width 0.3s;
+    }
+    .burger-icon span:nth-child(1) { width: 18px; }
+    .burger-icon span:nth-child(2) { width: 14px; }
+    .burger-icon span:nth-child(3) { width: 10px; }
+    .btn-menu:hover .burger-icon span { width: 18px; }
+
+    /* BOTTOM RIGHT — description */
+    .description {
+      position: absolute;
+      bottom: clamp(28px, 5vh, 60px);
+      right: clamp(28px, 4vw, 60px);
+      max-width: 190px;
+      text-align: right;
+      animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.45s both;
+    }
+    .description p {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.65;
+      letter-spacing: 0.02em;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <div class="outer-video">
+    <video autoplay muted loop playsinline>
+      <source src="./jungle.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="frame">
+    <div class="inner-video">
+      <video autoplay muted loop playsinline>
+        <source src="./jungle.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="grad-bottom"></div>
+    <div class="grad-left"></div>
+    <div class="grain"></div>
+
+    <div class="ui">
+
+      <div class="title">
+        <h1>Jungle<sup>®</sup></h1>
+      </div>
+
+      <a href="#" class="btn-explore">
+        Explore
+        <span class="arrow-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0a0f08" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"/>
+            <polyline points="7 7 17 7 17 17"/>
+          </svg>
+        </span>
+      </a>
+
+      <div class="tagline">
+        <p>Deeper into<br>Nature — Deeper<br>into Yourself</p>
+      </div>
+
+      <div class="btn-menu">
+        Menu
+        <div class="burger-icon">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="description">
+        <p>Immerse yourself in the heart of the jungle. Where every breath is a discovery.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    let cx = 0, cy = 0;
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursor.style.left = cx + 'px';
+      cursor.style.top  = cy + 'px';
+    });
+    document.querySelectorAll('a, .btn-menu, .btn-explore').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+  </script>
+
+</body>
+</html>
