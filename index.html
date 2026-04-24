@@ -39,10 +39,13 @@
       transform: scale(1.12);
       transition: opacity 1.2s ease;
     }
-    .outer-video .vid-jungle { opacity: 1; filter: blur(22px) brightness(0.3) saturate(0.5); }
-    .outer-video .vid-space  { opacity: 0; filter: blur(22px) brightness(0.25) saturate(0.4); }
-    body.space .outer-video .vid-jungle { opacity: 0; }
-    body.space .outer-video .vid-space  { opacity: 1; }
+    .outer-video .vid-jungle  { opacity: 1; filter: blur(22px) brightness(0.3) saturate(0.5); }
+    .outer-video .vid-space   { opacity: 0; filter: blur(22px) brightness(0.25) saturate(0.4); }
+    .outer-video .vid-freedom { opacity: 0; filter: blur(22px) brightness(0.3) saturate(0.6); }
+    body.space   .outer-video .vid-jungle  { opacity: 0; }
+    body.space   .outer-video .vid-space   { opacity: 1; }
+    body.freedom .outer-video .vid-jungle  { opacity: 0; }
+    body.freedom .outer-video .vid-freedom { opacity: 1; }
 
     /* FRAME */
     .frame {
@@ -65,10 +68,13 @@
       object-fit: cover;
       transition: opacity 1.2s ease;
     }
-    .vid-jungle { opacity: 1; filter: brightness(0.68) saturate(1.1); }
-    .vid-space  { opacity: 0; filter: brightness(0.75) saturate(0.9); }
-    body.space .vid-jungle { opacity: 0; }
-    body.space .vid-space  { opacity: 1; }
+    .vid-jungle  { opacity: 1; filter: brightness(0.68) saturate(1.1); }
+    .vid-space   { opacity: 0; filter: brightness(0.75) saturate(0.9); }
+    .vid-freedom { opacity: 0; filter: brightness(0.72) saturate(1.05); }
+    body.space   .vid-jungle  { opacity: 0; }
+    body.space   .vid-space   { opacity: 1; }
+    body.freedom .vid-jungle  { opacity: 0; }
+    body.freedom .vid-freedom { opacity: 1; }
 
     .grad-bottom {
       position: absolute; inset: 0; z-index: 1;
@@ -110,11 +116,6 @@
       vertical-align: super;
       opacity: 0.55;
     }
-    .title-jungle { opacity: 1; }
-    .title-space  { opacity: 0; position: absolute; top: clamp(24px,4vh,52px); left: clamp(28px,4vw,60px); }
-    body.space .title-jungle { opacity: 0; }
-    body.space .title-space  { opacity: 1; }
-
     /* TAGLINE */
     .scene-tagline {
       position: absolute;
@@ -130,10 +131,21 @@
       line-height: 1.15;
       text-shadow: 0 2px 24px rgba(0,0,0,0.4);
     }
-    .tagline-jungle { opacity: 1; }
-    .tagline-space  { opacity: 0; position: absolute; bottom: clamp(28px,5vh,60px); left: clamp(28px,4vw,60px); }
-    body.space .tagline-jungle { opacity: 0; }
-    body.space .tagline-space  { opacity: 1; }
+    .title-jungle  { opacity: 1; }
+    .title-space   { opacity: 0; position: absolute; top: clamp(24px,4vh,52px); left: clamp(28px,4vw,60px); }
+    .title-freedom { opacity: 0; position: absolute; top: clamp(24px,4vh,52px); left: clamp(28px,4vw,60px); }
+    body.space   .title-jungle  { opacity: 0; }
+    body.space   .title-space   { opacity: 1; }
+    body.freedom .title-jungle  { opacity: 0; }
+    body.freedom .title-freedom { opacity: 1; }
+
+    .tagline-jungle  { opacity: 1; }
+    .tagline-space   { opacity: 0; position: absolute; bottom: clamp(28px,5vh,60px); left: clamp(28px,4vw,60px); }
+    .tagline-freedom { opacity: 0; position: absolute; bottom: clamp(28px,5vh,60px); left: clamp(28px,4vw,60px); }
+    body.space   .tagline-jungle  { opacity: 0; }
+    body.space   .tagline-space   { opacity: 1; }
+    body.freedom .tagline-jungle  { opacity: 0; }
+    body.freedom .tagline-freedom { opacity: 1; }
 
     /* BUTTONS — inside frame, top right */
     .btn-group {
@@ -267,8 +279,9 @@
 
   <!-- BLURRED BACKGROUND (outside frame) -->
   <div class="outer-video">
-    <video class="vid-jungle" autoplay muted loop playsinline><source src="./jungle.mp4" type="video/mp4"></video>
-    <video class="vid-space"  autoplay muted loop playsinline><source src="./space.mp4"  type="video/mp4"></video>
+    <video class="vid-jungle"  autoplay muted loop playsinline><source src="./jungle.mp4"  type="video/mp4"></video>
+    <video class="vid-space"   autoplay muted loop playsinline><source src="./space.mp4"   type="video/mp4"></video>
+    <video class="vid-freedom" autoplay muted loop playsinline><source src="./freedom.mp4" type="video/mp4"></video>
   </div>
 
   <!-- FRAME -->
@@ -276,8 +289,9 @@
 
     <!-- SHARP VIDEOS stacked -->
     <div class="inner-video">
-      <video class="vid-jungle" autoplay muted loop playsinline><source src="./jungle.mp4" type="video/mp4"></video>
-      <video class="vid-space"  autoplay muted loop playsinline><source src="./space.mp4"  type="video/mp4"></video>
+      <video class="vid-jungle"  autoplay muted loop playsinline><source src="./jungle.mp4"  type="video/mp4"></video>
+      <video class="vid-space"   autoplay muted loop playsinline><source src="./space.mp4"   type="video/mp4"></video>
+      <video class="vid-freedom" autoplay muted loop playsinline><source src="./freedom.mp4" type="video/mp4"></video>
     </div>
 
     <div class="grad-bottom"></div>
@@ -293,12 +307,18 @@
       <div class="scene-title title-space">
         <h1>Space<sup>®</sup></h1>
       </div>
+      <div class="scene-title title-freedom">
+        <h1>Freedom<sup>®</sup></h1>
+      </div>
 
       <div class="scene-tagline tagline-jungle">
         <p>Deeper into<br>Nature — Deeper<br>into Yourself</p>
       </div>
       <div class="scene-tagline tagline-space">
         <p>Beyond the horizon —<br>Beyond<br>Yourself</p>
+      </div>
+      <div class="scene-tagline tagline-freedom">
+        <p>No boundaries —<br>Only<br>Horizon</p>
       </div>
 
     </div>
@@ -310,6 +330,9 @@
       </div>
       <div class="explore-option" id="opt-space" onclick="switchScene('space')">
         <h2>Space</h2><span class="dot"></span>
+      </div>
+      <div class="explore-option" id="opt-freedom" onclick="switchScene('freedom')">
+        <h2>Freedom</h2><span class="dot"></span>
       </div>
     </div>
 
@@ -342,8 +365,9 @@
 
   </div>
 
-  <audio id="audio-jungle" src="./jungle-audio.mp3" loop></audio>
-  <audio id="audio-space"  src="./space-audio.mp3"  loop></audio>
+  <audio id="audio-jungle"  src="./jungle-audio.mp3"  loop></audio>
+  <audio id="audio-space"   src="./space-audio.mp3"   loop></audio>
+  <audio id="audio-freedom" src="./freedom-audio.mp3" loop></audio>
 
   <script>
     const cursor = document.getElementById('cursor');
@@ -374,7 +398,9 @@
 
     function switchScene(name) {
       if (name === currentScene) { toggleExplore(); return; }
-      document.body.classList.toggle('space', name === 'space');
+      // remove all scene classes, add new one
+      document.body.classList.remove('space', 'freedom');
+      if (name !== 'jungle') document.body.classList.add(name);
       document.getElementById('opt-' + currentScene).classList.remove('current');
       document.getElementById('opt-' + name).classList.add('current');
       if (soundPlaying) {
