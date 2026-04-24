@@ -39,10 +39,10 @@
       object-fit: cover;
       transform: scale(1.12);
       opacity: 0;
+      filter: blur(22px) brightness(0.28) saturate(0.5);
       transition: opacity 1.2s ease;
     }
     .outer-video video.active { opacity: 1; }
-    .outer-video video { filter: blur(22px) brightness(0.28) saturate(0.5); }
 
     /* FRAME */
     .frame {
@@ -85,7 +85,6 @@
     /* UI */
     .ui { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 
-    /* TITLES */
     .scene-title {
       position: absolute;
       top: clamp(24px, 4vh, 52px);
@@ -111,7 +110,6 @@
       opacity: 0.55;
     }
 
-    /* TAGLINES */
     .scene-tagline {
       position: absolute;
       bottom: clamp(28px, 5vh, 60px);
@@ -157,7 +155,6 @@
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 0.04em;
-      text-decoration: none;
       cursor: none;
       transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
     }
@@ -176,7 +173,7 @@
     }
     .pill:hover .icon-circle { transform: rotate(45deg); }
 
-    /* EXPLORE FULL HEIGHT MENU */
+    /* EXPLORE PANEL */
     .explore-menu {
       position: absolute;
       top: 0; right: 0; bottom: 0;
@@ -189,7 +186,6 @@
       flex-direction: column;
       justify-content: center;
       padding: 0 clamp(24px, 3vw, 48px);
-      gap: 0;
       transform: translateX(100%);
       transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
       pointer-events: none;
@@ -204,7 +200,7 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 20px 0;
+      padding: 18px 0;
       border-bottom: 1px solid rgba(255,255,255,0.1);
       color: rgba(245,240,232,0.35);
       cursor: none;
@@ -215,7 +211,7 @@
     .explore-option.current { color: #f5f0e8; }
     .explore-option h2 {
       font-family: 'DM Serif Display', Georgia, serif;
-      font-size: clamp(28px, 3.5vw, 52px);
+      font-size: clamp(24px, 3vw, 46px);
       font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1;
@@ -223,12 +219,12 @@
     .dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      background: rgba(245,240,232,0.25);
+      background: rgba(245,240,232,0.2);
       flex-shrink: 0;
       transition: background 0.25s;
     }
     .explore-option.current .dot { background: #f5f0e8; }
-    .explore-option:hover .dot { background: rgba(245,240,232,0.7); }
+    .explore-option:hover .dot { background: rgba(245,240,232,0.6); }
 
     /* SOUND */
     .play-icon { display: flex; }
@@ -256,22 +252,22 @@
 
   <div class="cursor" id="cursor"></div>
 
-  <!-- OUTER BLUR -->
   <div class="outer-video">
-    <video id="out-jungle"  class="active" autoplay muted loop playsinline><source src="./jungle.mp4"  type="video/mp4"></video>
-    <video id="out-space"   autoplay muted loop playsinline><source src="./space.mp4"   type="video/mp4"></video>
-    <video id="out-freedom" autoplay muted loop playsinline><source src="./freedom.mp4" type="video/mp4"></video>
-    <video id="out-forest"  autoplay muted loop playsinline><source src="./forest.mp4"  type="video/mp4"></video>
+    <video id="out-jungle"    class="active" autoplay muted loop playsinline><source src="./jungle.mp4"    type="video/mp4"></video>
+    <video id="out-space"     autoplay muted loop playsinline><source src="./space.mp4"     type="video/mp4"></video>
+    <video id="out-freedom"   autoplay muted loop playsinline><source src="./freedom.mp4"   type="video/mp4"></video>
+    <video id="out-forest"    autoplay muted loop playsinline><source src="./forest.mp4"    type="video/mp4"></video>
+    <video id="out-waterfall" autoplay muted loop playsinline><source src="./waterfall.mp4" type="video/mp4"></video>
   </div>
 
-  <!-- FRAME -->
   <div class="frame">
 
     <div class="inner-video">
-      <video id="in-jungle"  class="active" autoplay muted loop playsinline><source src="./jungle.mp4"  type="video/mp4"></video>
-      <video id="in-space"   autoplay muted loop playsinline><source src="./space.mp4"   type="video/mp4"></video>
-      <video id="in-freedom" autoplay muted loop playsinline><source src="./freedom.mp4" type="video/mp4"></video>
-      <video id="in-forest"  autoplay muted loop playsinline><source src="./forest.mp4"  type="video/mp4"></video>
+      <video id="in-jungle"    class="active" autoplay muted loop playsinline><source src="./jungle.mp4"    type="video/mp4"></video>
+      <video id="in-space"     autoplay muted loop playsinline><source src="./space.mp4"     type="video/mp4"></video>
+      <video id="in-freedom"   autoplay muted loop playsinline><source src="./freedom.mp4"   type="video/mp4"></video>
+      <video id="in-forest"    autoplay muted loop playsinline><source src="./forest.mp4"    type="video/mp4"></video>
+      <video id="in-waterfall" autoplay muted loop playsinline><source src="./waterfall.mp4" type="video/mp4"></video>
     </div>
 
     <div class="grad-bottom"></div>
@@ -279,34 +275,27 @@
     <div class="grain"></div>
 
     <div class="ui">
-      <div class="scene-title active" id="title-jungle"><h1>Jungle<sup>®</sup></h1></div>
-      <div class="scene-title" id="title-space"><h1>Space<sup>®</sup></h1></div>
-      <div class="scene-title" id="title-freedom"><h1>Freedom<sup>®</sup></h1></div>
-      <div class="scene-title" id="title-forest"><h1>Forest<sup>®</sup></h1></div>
+      <div class="scene-title active" id="title-jungle">   <h1>Jungle<sup>®</sup></h1></div>
+      <div class="scene-title"        id="title-space">    <h1>Space<sup>®</sup></h1></div>
+      <div class="scene-title"        id="title-freedom">  <h1>Freedom<sup>®</sup></h1></div>
+      <div class="scene-title"        id="title-forest">   <h1>Forest<sup>®</sup></h1></div>
+      <div class="scene-title"        id="title-waterfall"><h1>Waterfall<sup>®</sup></h1></div>
 
-      <div class="scene-tagline active" id="tag-jungle"><p>Deeper into<br>Nature — Deeper<br>into Yourself</p></div>
-      <div class="scene-tagline" id="tag-space"><p>Beyond the horizon —<br>Beyond<br>Yourself</p></div>
-      <div class="scene-tagline" id="tag-freedom"><p>No boundaries —<br>Only<br>Horizon</p></div>
-      <div class="scene-tagline" id="tag-forest"><p>Where the trees<br>breathe —<br>and so do you</p></div>
+      <div class="scene-tagline active" id="tag-jungle">   <p>Deeper into<br>Nature — Deeper<br>into Yourself</p></div>
+      <div class="scene-tagline"        id="tag-space">    <p>Beyond the horizon —<br>Beyond<br>Yourself</p></div>
+      <div class="scene-tagline"        id="tag-freedom">  <p>No boundaries —<br>Only<br>Horizon</p></div>
+      <div class="scene-tagline"        id="tag-forest">   <p>Where the trees<br>breathe —<br>and so do you</p></div>
+      <div class="scene-tagline"        id="tag-waterfall"><p>Let it flow —<br>Let it<br>go</p></div>
     </div>
 
-    <!-- EXPLORE MENU -->
     <div class="explore-menu" id="exploreMenu">
-      <div class="explore-option current" id="opt-jungle" onclick="switchScene('jungle')">
-        <h2>Jungle</h2><span class="dot"></span>
-      </div>
-      <div class="explore-option" id="opt-space" onclick="switchScene('space')">
-        <h2>Space</h2><span class="dot"></span>
-      </div>
-      <div class="explore-option" id="opt-freedom" onclick="switchScene('freedom')">
-        <h2>Freedom</h2><span class="dot"></span>
-      </div>
-      <div class="explore-option" id="opt-forest" onclick="switchScene('forest')">
-        <h2>Forest</h2><span class="dot"></span>
-      </div>
+      <div class="explore-option current" id="opt-jungle"    onclick="switchScene('jungle')"   ><h2>Jungle</h2>   <span class="dot"></span></div>
+      <div class="explore-option"         id="opt-space"     onclick="switchScene('space')"    ><h2>Space</h2>    <span class="dot"></span></div>
+      <div class="explore-option"         id="opt-freedom"   onclick="switchScene('freedom')"  ><h2>Freedom</h2>  <span class="dot"></span></div>
+      <div class="explore-option"         id="opt-forest"    onclick="switchScene('forest')"   ><h2>Forest</h2>   <span class="dot"></span></div>
+      <div class="explore-option"         id="opt-waterfall" onclick="switchScene('waterfall')"><h2>Waterfall</h2><span class="dot"></span></div>
     </div>
 
-    <!-- BUTTONS -->
     <div class="btn-group">
       <div class="pill" id="exploreBtn" onclick="toggleExplore()">
         Explore
@@ -332,10 +321,12 @@
 
   </div>
 
-  <audio id="audio-jungle"  src="./jungle-audio.mp3"  loop></audio>
-  <audio id="audio-space"   src="./space-audio.mp3"   loop></audio>
-  <audio id="audio-freedom" src="./freedom-audio.mp3" loop></audio>
-  <audio id="audio-forest"  src="./forest-audio.mp3"  loop></audio>
+  <!-- All audio preloaded, same format 44100Hz 128kbps -->
+  <audio id="audio-jungle"    src="./jungle-audio.mp3"    preload="auto" loop></audio>
+  <audio id="audio-space"     src="./space-audio.mp3"     preload="auto" loop></audio>
+  <audio id="audio-freedom"   src="./freedom-audio.mp3"   preload="auto" loop></audio>
+  <audio id="audio-forest"    src="./forest-audio.mp3"    preload="auto" loop></audio>
+  <audio id="audio-waterfall" src="./waterfall-audio.mp3" preload="auto" loop></audio>
 
   <script>
     // cursor
@@ -349,7 +340,6 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 
-    const scenes = ['jungle', 'space', 'freedom', 'forest'];
     let current = 'jungle';
     let menuOpen = false;
     let soundPlaying = false;
@@ -357,30 +347,38 @@
     function switchScene(name) {
       if (name === current) { closeMenu(); return; }
 
-      // videos
-      document.getElementById('out-' + current).classList.remove('active');
-      document.getElementById('out-' + name).classList.add('active');
-      document.getElementById('in-' + current).classList.remove('active');
-      document.getElementById('in-' + name).classList.add('active');
+      // swap videos
+      ['out-','in-'].forEach(prefix => {
+        document.getElementById(prefix + current).classList.remove('active');
+        document.getElementById(prefix + name).classList.add('active');
+      });
 
-      // text
-      document.getElementById('title-' + current).classList.remove('active');
-      document.getElementById('title-' + name).classList.add('active');
-      document.getElementById('tag-' + current).classList.remove('active');
-      document.getElementById('tag-' + name).classList.add('active');
+      // swap text
+      ['title-','tag-'].forEach(prefix => {
+        document.getElementById(prefix + current).classList.remove('active');
+        document.getElementById(prefix + name).classList.add('active');
+      });
 
-      // menu dots
+      // swap menu dot
       document.getElementById('opt-' + current).classList.remove('current');
       document.getElementById('opt-' + name).classList.add('current');
 
-      // audio — if playing, stop old and start new seamlessly
+      // swap audio — stop old, start new if playing
       if (soundPlaying) {
         const oldAudio = document.getElementById('audio-' + current);
-        const newAudio = document.getElementById('audio-' + name);
         oldAudio.pause();
         oldAudio.currentTime = 0;
+
+        const newAudio = document.getElementById('audio-' + name);
         newAudio.currentTime = 0;
-        newAudio.play().catch(() => {});
+        const playPromise = newAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Audio play failed:', err);
+            soundPlaying = false;
+            document.getElementById('soundBtn').classList.remove('playing');
+          });
+        }
       }
 
       current = name;
@@ -406,11 +404,18 @@
     function toggleSound() {
       const audio = document.getElementById('audio-' + current);
       const btn = document.getElementById('soundBtn');
+
       if (audio.paused) {
         audio.currentTime = 0;
-        audio.play().catch(() => {});
-        soundPlaying = true;
-        btn.classList.add('playing');
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            soundPlaying = true;
+            btn.classList.add('playing');
+          }).catch(err => {
+            console.warn('Audio play failed:', err);
+          });
+        }
       } else {
         audio.pause();
         soundPlaying = false;
