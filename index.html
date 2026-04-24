@@ -234,11 +234,29 @@
       width: clamp(480px, 72vw, 1020px);
       opacity: 0;
       transition: opacity 0.8s ease;
-      pointer-events: none;
+      pointer-events: all;
       filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
       z-index: 1;
     }
     .sneaker.active { opacity: 1; }
+
+    /* MAGNIFIER LENS */
+    .magnifier {
+      position: fixed;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.5);
+      pointer-events: none;
+      z-index: 9998;
+      overflow: hidden;
+      display: none;
+      transform: translate(-50%, -50%);
+    }
+    .magnifier img {
+      position: absolute;
+      pointer-events: none;
+    }
     .play-icon { display: flex; }
     .sound-bars { display: none; align-items: center; gap: 3px; height: 14px; }
     .sound-bars span { display: block; width: 2.5px; background: #0a0f08; border-radius: 2px; }
@@ -263,6 +281,7 @@
 <body>
 
   <div class="cursor" id="cursor"></div>
+  <div class="magnifier" id="magnifier"><img id="magnifier-img" src="./jungle.png" alt=""></div>
 
   <div class="outer-video">
     <video id="out-jungle"    class="active" autoplay muted loop playsinline><source src="./jungle.mp4"    type="video/mp4"></video>
@@ -293,11 +312,11 @@
       <div class="scene-title"        id="title-forest">   <h1>Forest<sup>®</sup></h1></div>
       <div class="scene-title"        id="title-waterfall"><h1>Waterfall<sup>®</sup></h1></div>
 
-      <div class="scene-tagline active" id="tag-jungle">   <p>Deeper into<br>Nature — Deeper<br>into Yourself</p></div>
-      <div class="scene-tagline"        id="tag-space">    <p>Beyond the horizon —<br>Beyond<br>Yourself</p></div>
-      <div class="scene-tagline"        id="tag-freedom">  <p>No boundaries —<br>Only<br>Horizon</p></div>
-      <div class="scene-tagline"        id="tag-forest">   <p>Where the trees<br>breathe —<br>and so do you</p></div>
-      <div class="scene-tagline"        id="tag-waterfall"><p>Let it flow —<br>Let it<br>go</p></div>
+      <div class="scene-tagline active" id="tag-jungle">   <p>Deeper into Nature —<br>Deeper into Yourself</p></div>
+      <div class="scene-tagline"        id="tag-space">    <p>Beyond the horizon —<br>Beyond Yourself</p></div>
+      <div class="scene-tagline"        id="tag-freedom">  <p>No boundaries —<br>Only Horizon</p></div>
+      <div class="scene-tagline"        id="tag-forest">   <p>Where the trees breathe —<br>and so do you</p></div>
+      <div class="scene-tagline"        id="tag-waterfall"><p>Let it flow —<br>Let it go</p></div>
 
       <img class="sneaker active" id="shoe-jungle"    src="./jungle.png"    alt="Jungle sneaker">
       <img class="sneaker"        id="shoe-space"     src="./space.png"     alt="Space sneaker">
@@ -349,10 +368,47 @@
   <script>
     // cursor
     const cursor = document.getElementById('cursor');
+    const magnifier = document.getElementById('magnifier');
+    const magnifierImg = document.getElementById('magnifier-img');
+    const ZOOM = 2.5;
+    const LENS = 160;
+
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top  = e.clientY + 'px';
     });
+
+    // sneaker hover — magnifier
+    document.querySelectorAll('.sneaker').forEach(shoe => {
+      shoe.addEventListener('mouseenter', () => {
+        cursor.style.display = 'none';
+        magnifier.style.display = 'block';
+        magnifierImg.src = shoe.src;
+      });
+      shoe.addEventListener('mouseleave', () => {
+        cursor.style.display = 'block';
+        magnifier.style.display = 'none';
+      });
+      shoe.addEventListener('mousemove', e => {
+        magnifier.style.left = e.clientX + 'px';
+        magnifier.style.top  = e.clientY + 'px';
+
+        const rect = shoe.getBoundingClientRect();
+        const relX = e.clientX - rect.left;
+        const relY = e.clientY - rect.top;
+
+        const bgW = rect.width  * ZOOM;
+        const bgH = rect.height * ZOOM;
+        const bgX = relX * ZOOM - LENS / 2;
+        const bgY = relY * ZOOM - LENS / 2;
+
+        magnifierImg.style.width  = bgW + 'px';
+        magnifierImg.style.height = bgH + 'px';
+        magnifierImg.style.left   = -bgX + 'px';
+        magnifierImg.style.top    = -bgY + 'px';
+      });
+    });
+
     document.querySelectorAll('.pill, .explore-option').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -400,6 +456,7 @@
       }
 
       current = name;
+      magnifierImg.src = `./${name}.png`;
       closeMenu();
     }
 
