@@ -177,7 +177,7 @@
     .explore-menu {
       position: absolute;
       top: 0; right: 0; bottom: 0;
-      width: 17.5%;
+      width: 18.4%;
       background: rgba(6,6,6,0.72);
       backdrop-filter: blur(24px);
       border-left: 1px solid rgba(255,255,255,0.1);
@@ -231,14 +231,14 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(480px, 72vw, 1020px);
+      width: clamp(456px, 68vw, 969px);
       opacity: 0;
       transition: opacity 0.8s ease;
-      pointer-events: all;
+      pointer-events: none;
       filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
       z-index: 1;
     }
-    .sneaker.active { opacity: 1; }
+    .sneaker.active { opacity: 1; pointer-events: all; }
 
     /* MAGNIFIER LENS */
     .magnifier {
@@ -370,7 +370,7 @@
     const cursor = document.getElementById('cursor');
     const magnifier = document.getElementById('magnifier');
     const magnifierImg = document.getElementById('magnifier-img');
-    const ZOOM = 2.5;
+    const ZOOM = 1.8;
     const LENS = 160;
 
     document.addEventListener('mousemove', e => {
@@ -383,7 +383,7 @@
       shoe.addEventListener('mouseenter', () => {
         cursor.style.display = 'none';
         magnifier.style.display = 'block';
-        magnifierImg.src = shoe.src;
+        magnifierImg.src = shoe.src;  // use THIS shoe's src
       });
       shoe.addEventListener('mouseleave', () => {
         cursor.style.display = 'block';
