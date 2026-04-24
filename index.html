@@ -226,7 +226,19 @@
     .explore-option.current .dot { background: #f5f0e8; }
     .explore-option:hover .dot { background: rgba(245,240,232,0.6); }
 
-    /* SOUND */
+    /* SNEAKER — centered in frame */
+    .sneaker {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(320px, 48vw, 680px);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
+      z-index: 1;
+    }
+    .sneaker.active { opacity: 1; }
     .play-icon { display: flex; }
     .sound-bars { display: none; align-items: center; gap: 3px; height: 14px; }
     .sound-bars span { display: block; width: 2.5px; background: #0a0f08; border-radius: 2px; }
@@ -286,6 +298,12 @@
       <div class="scene-tagline"        id="tag-freedom">  <p>No boundaries —<br>Only<br>Horizon</p></div>
       <div class="scene-tagline"        id="tag-forest">   <p>Where the trees<br>breathe —<br>and so do you</p></div>
       <div class="scene-tagline"        id="tag-waterfall"><p>Let it flow —<br>Let it<br>go</p></div>
+
+      <img class="sneaker active" id="shoe-jungle"    src="./jungle.png"    alt="Jungle sneaker">
+      <img class="sneaker"        id="shoe-space"     src="./space.png"     alt="Space sneaker">
+      <img class="sneaker"        id="shoe-freedom"   src="./freedom.png"   alt="Freedom sneaker">
+      <img class="sneaker"        id="shoe-forest"    src="./forest.png"    alt="Forest sneaker">
+      <img class="sneaker"        id="shoe-waterfall" src="./waterfall.png" alt="Waterfall sneaker">
     </div>
 
     <div class="explore-menu" id="exploreMenu">
@@ -353,8 +371,8 @@
         document.getElementById(prefix + name).classList.add('active');
       });
 
-      // swap text
-      ['title-','tag-'].forEach(prefix => {
+      // swap text + sneaker
+      ['title-','tag-','shoe-'].forEach(prefix => {
         document.getElementById(prefix + current).classList.remove('active');
         document.getElementById(prefix + name).classList.add('active');
       });
